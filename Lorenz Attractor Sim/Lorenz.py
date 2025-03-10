@@ -34,7 +34,7 @@ PLOT_COLOR = "grey"
 LW = 1
 
 # Camera rotation speed
-ROTATION_SPEED = 1/10
+ROTATION_SPEED = 1/8
 
 # Integrate the Lorenz equations with the RK4 method
 def lorenz(r_vec):
@@ -86,6 +86,6 @@ def update(i):
     ax.scatter(pos[i, 0], pos[i, 1], pos[i, 2], color="white", linewidth=LW, marker="*")
     ax.legend()
 
-ani = animation.FuncAnimation(fig, update, frames=n_time_steps, interval = 10, repeat = False)
+ani = animation.FuncAnimation(fig, update, frames=n_time_steps, interval = 0.00001, repeat = False)
 plt.show()
 
