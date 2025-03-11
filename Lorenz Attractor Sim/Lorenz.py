@@ -5,9 +5,11 @@ import matplotlib.animation as animation
 
 from IPython.display import HTML
 
+import time
+
 # Parameters
 s=10
-r=28
+r=100
 b=2.667
 
 # Fixed points
@@ -16,15 +18,19 @@ fp_arr = [[0, 0, 0], [np.sqrt(b*(r-1)), np.sqrt(b*(r-1)), r-1], [-np.sqrt(b*(r-1
 # Initial state
 r_vec_initial = [0, 1, 10]
 
-# Time step size
-dt = 0.01
+# Time step size (s)
+dt = 0.001
 
-# Stop time
-t_stop = 100
+# Time to animate for (s)
+total_duration = 10
 
-# Time array
-t_arr = np.arange(0, t_stop, dt)
-n_time_steps = len(t_arr)
+# Calculate the number of time steps needed
+n_time_steps = int(np.floor(total_duration / dt))
+
+# Calculate the time interval between frames (ms)
+# This is used to adjust the animation speed so it is consistent for different values of dt and total_duration
+total_duration_ms = total_duration*1000
+interval_ms = total_duration_ms / n_time_steps
 
 # Colours
 BACKGROUND_COLOR = "black"
@@ -72,6 +78,8 @@ ax = fig.add_subplot(111, projection="3d")
 
 # Update function for the animation
 def update(i):
+    start_time = time.time()
+
     # Sets the viewpoint of the camera
     ax.view_init(0, -56 + i*ROTATION_SPEED) # + i*ROTATION_SPEED to rotate around the z-axis
     ax.clear()
@@ -86,6 +94,15 @@ def update(i):
     ax.scatter(pos[i, 0], pos[i, 1], pos[i, 2], color="white", linewidth=LW, marker="*")
     ax.legend()
 
-ani = animation.FuncAnimation(fig, update, frames=n_time_steps, interval = 0.00001, repeat = False)
+    end_time = time.time()
+    execution_time_ms = (end_time - start_time) * 1000
+    adjusted_interval_ms = interval_ms - execution_time_ms
+
+    ani.event_source.interval = adjusted_interval_ms
+
+    print(f"{int(i/(n_time_steps - 1) * 100)} % finished, Interval: {adjusted_interval_ms} ms, Execution time: {execution_time_ms} ms")
+
+
+ani = animation.FuncAnimation(fig, update, frames=n_time_steps, interval = interval_ms, repeat = False)
 plt.show()
 
