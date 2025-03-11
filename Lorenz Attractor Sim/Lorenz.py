@@ -9,7 +9,7 @@ import time
 
 # Parameters
 s=10
-r=100
+r=28
 b=2.667
 
 # Fixed points
@@ -18,8 +18,11 @@ fp_arr = [[0, 0, 0], [np.sqrt(b*(r-1)), np.sqrt(b*(r-1)), r-1], [-np.sqrt(b*(r-1
 # Initial state
 r_vec_initial = [0, 1, 10]
 
+# Random initial state
+#r_vec_initial = np.random.uniform(low=-100, high=100, size=(3,))
+
 # Time step size (s)
-dt = 0.001
+dt = 0.01
 
 # Time to animate for (s)
 total_duration = 10
@@ -40,7 +43,7 @@ PLOT_COLOR = "grey"
 LW = 1
 
 # Camera rotation speed
-ROTATION_SPEED = 1/8
+ROTATION_SPEED = 1/2
 
 # Integrate the Lorenz equations with the RK4 method
 def lorenz(r_vec):
